@@ -58,7 +58,7 @@ class S3CsvFileProcessor:
     def _process_customers(self):
         self.conn.execute("""
             CREATE OR REPLACE TABLE customers_convert AS
-            SELECT
+            SELECT DISTINCT
                 CAST(customer_id AS TEXT) AS customer_id,
                 CAST(customer_unique_id AS TEXT) AS customer_unique_id,
                 CAST(customer_zip_code_prefix AS TEXT) AS customer_zip_code_prefix,
@@ -72,7 +72,7 @@ class S3CsvFileProcessor:
     def _process_order_items(self):
         self.conn.execute("""
             CREATE OR REPLACE TABLE order_items_convert AS
-            SELECT
+            SELECT DISTINCT
                 CAST(order_id AS TEXT) AS order_id,
                 CAST(order_item_id AS INTEGER) AS order_item_id,
                 CAST(product_id AS TEXT) AS product_id,
@@ -88,7 +88,7 @@ class S3CsvFileProcessor:
     def _process_order_payments(self):
         self.conn.execute("""
             CREATE OR REPLACE TABLE order_payments_convert AS
-            SELECT
+            SELECT DISTINCT
                 CAST(order_id AS TEXT) AS order_id,
                 CAST(payment_sequential AS INTEGER) AS payment_sequential,
                 LOWER(TRIM(payment_type)) AS payment_type,
@@ -102,7 +102,7 @@ class S3CsvFileProcessor:
     def _process_order_reviews(self):
         self.conn.execute("""
             CREATE OR REPLACE TABLE order_reviews_convert AS
-            SELECT
+            SELECT DISTINCT
                 CAST(review_id AS TEXT) AS review_id,
                 CAST(order_id AS TEXT) AS order_id,
                 CAST(review_score AS INTEGER) AS review_score,
@@ -118,7 +118,7 @@ class S3CsvFileProcessor:
     def _process_orders(self):
         self.conn.execute("""
            CREATE OR REPLACE TABLE orders_convert AS
-            SELECT
+            SELECT DISTINCT
                 CAST(order_id AS TEXT) AS order_id,
                 CAST(customer_id AS TEXT) AS customer_id,
                 LOWER(TRIM(order_status)) AS order_status,
@@ -135,7 +135,7 @@ class S3CsvFileProcessor:
     def _process_product_category_name_translation(self):
         self.conn.execute("""
            CREATE OR REPLACE TABLE product_category_name_translation_convert AS
-            SELECT
+            SELECT DISTINCT
                 TRIM(product_category_name) AS product_category_name,
                 TRIM(product_category_name_english) AS product_category_name_english
             FROM product_category_name_translation;
@@ -146,7 +146,7 @@ class S3CsvFileProcessor:
     def _process_products(self):
         self.conn.execute("""
            CREATE OR REPLACE TABLE products_convert AS
-            SELECT
+            SELECT DISTINCT
                 CAST(product_id AS TEXT) AS product_id,
                 TRIM(product_category_name) AS product_category_name,
                 CAST(product_name_lenght AS INTEGER) AS product_name_length,
@@ -164,7 +164,7 @@ class S3CsvFileProcessor:
     def _process_sellers(self):
         self.conn.execute("""
            CREATE OR REPLACE TABLE sellers_convert AS
-            SELECT
+            SELECT DISTINCT
                 CAST(seller_id AS TEXT) AS seller_id,
                 CAST(seller_zip_code_prefix AS TEXT) AS seller_zip_code_prefix,
                 LOWER(TRIM(seller_city)) AS seller_city,
