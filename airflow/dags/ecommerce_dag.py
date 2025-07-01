@@ -124,8 +124,8 @@ def ecommerce_dag():
     (
         gd_file_list
         >> ingested_file_list
-        #>> processed_file_list
-        #>> aggregated_file_list
+        >> processed_file_list
+        >> aggregated_file_list
         #>> load_to_snowflake
     )
 
