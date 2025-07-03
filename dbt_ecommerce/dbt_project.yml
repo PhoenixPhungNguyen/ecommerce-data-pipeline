@@ -2,11 +2,11 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'dbt_payroll'
+name: 'dbt_ecommerce'
 version: '1.0.0'
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'dbt_payroll'
+profile: 'dbt_ecommerce'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -30,7 +30,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
 models:
-  dbt_payroll:
+  dbt_ecommerce:
     staging:
       +schema: staging
       +materialized: view
@@ -43,18 +43,18 @@ models:
         +materialized: incremental
         +post-hook:
           - "{% if target.type == 'snowflake' %}
-              GRANT SELECT ON {{ this }} TO ROLE REPORTER2;
+              GRANT SELECT ON {{ this }} TO ROLE REPORTER;
             {% endif %}"
       fact:
         +schema: marts
         +materialized: incremental
         +post-hook:
           - "{% if target.type == 'snowflake' %}
-              GRANT SELECT ON {{ this }} TO ROLE REPORTER2;
+              GRANT SELECT ON {{ this }} TO ROLE REPORTER;
             {% endif %}"
 
 seeds:
-  dbt_payroll:
+  dbt_ecommerce:
     # Seeds are CSV files that can be loaded into your data warehouse.
     # They can be used to load static data, such as lookup tables.
     +schema: marts

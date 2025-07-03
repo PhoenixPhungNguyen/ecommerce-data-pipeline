@@ -1,4 +1,4 @@
-dbt_payroll:
+dbt_ecommerce:
   outputs:
     staging:
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"

@@ -37,7 +37,7 @@ This project demonstrates a modern data pipeline for automating the extraction, 
 .
 ├── airflow/                /* Airflow folder, contains DAGs and scripts */
 ├── assets/                 /* Assets folder, contains diagrams, dashboards, etc. */
-├── dbt_payroll/            /* dbt project folder, contains dbt models */
+├── dbt_ecommerce/            /* dbt project folder, contains dbt models */
 ├── docker/                 /* Docker services configuration folder */
 │   ├── airflow/               /* Airflow orchestrator configurations */
 │   ├── spark-app              /* Spark container for transformation logic */
