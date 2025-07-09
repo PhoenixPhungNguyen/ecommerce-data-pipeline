@@ -2,7 +2,7 @@
 {{
     config(
         target_schema='SNAPSHOTS',
-        unique_key='sellers_id',
+        unique_key='seller_id',
         strategy='check',
         check_cols=[
             'seller_id',
