@@ -17,3 +17,6 @@ WITH sellers AS (
 )
 SELECT *
 FROM sellers
+{% if is_incremental() %}
+WHERE dbt_valid_from > (SELECT MAX(dbt_valid_from) FROM {{ this }})
+{% endif %}

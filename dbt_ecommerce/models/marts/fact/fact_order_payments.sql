@@ -58,7 +58,3 @@ payments_joined AS (
 
 SELECT *
 FROM payments_joined
-
-{% if is_incremental() %}
-WHERE order_purchase_date > (SELECT MAX(order_purchase_date) FROM {{ this }})
-{% endif %}

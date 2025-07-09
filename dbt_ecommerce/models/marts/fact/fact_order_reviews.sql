@@ -61,7 +61,3 @@ reviews_joined AS (
 
 SELECT *
 FROM reviews_joined
-
-{% if is_incremental() %}
-WHERE review_creation_date > (SELECT MAX(review_creation_date) FROM {{ this }})
-{% endif %}
