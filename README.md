@@ -1,4 +1,4 @@
-# Payroll Data Pipeline
+# Ecommerce Data Pipeline
 
 This project demonstrates a modern data pipeline for automating the extraction, transformation, and loading (ETL) of payroll and HR data. The pipeline centralizes payroll data, enabling efficient processing, compliance, and analytics to support HR and finance operations.
 

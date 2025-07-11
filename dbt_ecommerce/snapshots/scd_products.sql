@@ -5,7 +5,6 @@
         unique_key='product_id',
         strategy='check',
         check_cols=[
-            'product_id',
             'product_category_name',
             'product_name_length',
             'product_description_length',

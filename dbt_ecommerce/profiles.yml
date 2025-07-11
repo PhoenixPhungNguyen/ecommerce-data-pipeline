@@ -11,3 +11,4 @@ dbt_ecommerce:
       user: "{{ env_var('DBT_USER') }}"
       warehouse: COMPUTE_WH
   target: staging
+
