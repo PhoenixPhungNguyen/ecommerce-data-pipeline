@@ -1,9 +1,9 @@
 # Ecommerce Data Pipeline
 
-This project demonstrates a modern data pipeline for automating the extraction, transformation, and loading (ETL) of payroll and HR data. The pipeline centralizes payroll data, enabling efficient processing, compliance, and analytics to support HR and finance operations.
+This project demonstrates a modern data pipeline for automating the extraction, transformation, and loading (ETL) of ecommerce data. The pipeline centralizes ecommerce data, enabling efficient processing, compliance, and analytics to support HR and finance operations.
 
 ## Table of Contents
-- [Payroll Data Pipeline](#payroll-data-pipeline)
+- [Ecommerce Data Pipeline](#ecommerce-data-pipeline)
   - [Table of Contents](#table-of-contents)
   - [Architecture](#architecture)
   - [Project Structure](#project-structure)
@@ -20,7 +20,7 @@ This project demonstrates a modern data pipeline for automating the extraction, 
     - [dbt \& Great Expectations](#dbt--great-expectations)
     - [PowerBI](#powerbi)
   - [Business Insights](#business-insights)
-    - [Payroll Overview](#payroll-overview)
+    - [Ecommerce Overview](#ecommerce-overview)
     - [Recommendations](#recommendations)
 
 ## Architecture
@@ -55,7 +55,7 @@ This project demonstrates a modern data pipeline for automating the extraction, 
 
 ## Data Source
 
-The payroll datasets include employee records, salary details, attendance logs, tax deductions, and benefits information. These are typically exported from HR/payroll systems and ingested into the pipeline for processing and analytics.
+The ecommerce datasets include employee records, salary details, attendance logs, tax deductions, and benefits information. These are typically exported from ecommerce systems and ingested into the pipeline for processing and analytics.
 
 <p align="center">
     <img src="assets/diagrams/source_relational_model.png" alt="source-relational-model" style="border-radius: 10px;">
@@ -73,7 +73,7 @@ The payroll datasets include employee records, salary details, attendance logs, 
 
 ### Clone the repository
 ```shell
-git clone https://github.com/cdoge25/payroll-project.git
+git clone https://github.com/PhoenixPhungNguyen/ecommerce-data-pipeline.git
 ```
 
 ### Setup virtual environment
@@ -101,7 +101,7 @@ docker compose up -d --build
 ## Tech Stack
 
 ### Apache Airflow
-Orchestrates ETL workflows for payroll data processing.
+Orchestrates ETL workflows for ecommerce data processing.
 <p align="center">
     <img src="assets/diagrams/airflow-dag.png" alt="airflow-dag" style="border-radius: 10px;">
     </br>
@@ -136,7 +136,7 @@ dbt transforms data into analytics-ready models; Great Expectations validates da
 </p>
 
 ### PowerBI
-For dashboarding and visualization of payroll analytics.
+For dashboarding and visualization of ecommerce analytics.
 <p align="center">
     <img src="assets/diagrams/powerbi.png" alt="powerbi" style="border-radius: 10px;">
     </br>
@@ -147,15 +147,11 @@ For dashboarding and visualization of payroll analytics.
 
 Once the pipeline is operational, you can generate insights such as:
 
-### Payroll Overview
-- Total payroll expenses by month, department, or location.
+### Ecommerce Overview
+- Total ecommerce expenses by month, department, or location.
 - Trends in salary, overtime, and deductions.
 
 ### Recommendations
-- Optimize payroll schedules to improve cash flow.
+- Optimize ecommerce schedules to improve cash flow.
 - Target retention strategies for key employee segments.
 - Automate compliance checks to reduce audit risks.
-
----
-
-<p>&copy; 2025 cdoge25 |  Nguyen Duc Thien Hai</p>
