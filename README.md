@@ -1,6 +1,6 @@
 # Ecommerce Data Pipeline
 
-This project demonstrates a modern data pipeline for automating the extraction, transformation, and loading (ETL) of ecommerce data. The pipeline centralizes ecommerce data, enabling efficient processing, compliance, and analytics to support HR and finance operations.
+This project demonstrates an ecommerce data pipeline that automates the extraction, transformation, and loading (ETL) of data from the OLTP system of an ecommerce platform. The pipeline centralizes sales and payment data, enabling efficient processing, regulatory compliance, and analytics to support business decision-making and reporting.
 
 ## Table of Contents
 - [Ecommerce Data Pipeline](#ecommerce-data-pipeline)
@@ -50,15 +50,14 @@ This project demonstrates a modern data pipeline for automating the extraction, 
 ├── snowflake-setup.md      /* Instructions to setup Snowflake beforehand */
 ├── pyproject.toml          /* Project dependencies, run uv sync in virtual environment */
 ├── docker-compose.yaml     /* Docker Compose file to define services */
-└── Makefile                /* Makefile for automating tasks and commands */
 ```
 
 ## Data Source
 
-The ecommerce datasets include employee records, salary details, attendance logs, tax deductions, and benefits information. These are typically exported from ecommerce systems and ingested into the pipeline for processing and analytics.
+The ecommerce datasets include sales and payments information. These are typically exported from the OLTP system of an ecommerce platform and ingested into the pipeline for processing and analytics.
 
 <p align="center">
-    <img src="assets/diagrams/source_relational_model.png" alt="source-relational-model" style="border-radius: 10px;">
+    <img src="assets/diagrams/diagram.png" alt="source-relational-model" style="border-radius: 10px;">
     </br>
   Source Relational Model
 </p>
@@ -69,7 +68,6 @@ The ecommerce datasets include employee records, salary details, attendance logs
 > - **Git** for version control.
 > - **uv** or **Conda/Mamba** for virtual environment management.
 > - **Docker** for containerization.
-> - **Makefile** (optional) for automating Docker commands.
 
 ### Clone the repository
 ```shell
