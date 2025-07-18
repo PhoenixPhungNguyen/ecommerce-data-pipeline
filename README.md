@@ -57,7 +57,7 @@ This project demonstrates an ecommerce data pipeline that automates the extracti
 The ecommerce datasets include sales and payments information. These are typically exported from the OLTP system of an ecommerce platform and ingested into the pipeline for processing and analytics.
 
 <p align="center">
-    <img src="assets/diagrams/diagram.png" alt="source-relational-model" style="border-radius: 10px;">
+    <img src="assets/diagrams/relational_model_diagram.png" alt="source-relational-model" style="border-radius: 10px;">
     </br>
   Source Relational Model
 </p>
