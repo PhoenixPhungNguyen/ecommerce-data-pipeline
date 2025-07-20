@@ -77,13 +77,14 @@ class S3CsvFileProcessor:
                 CAST(order_item_id AS INTEGER) AS order_item_id,
                 CAST(product_id AS TEXT) AS product_id,
                 CAST(seller_id AS TEXT) AS seller_id,
-                strftime(shipping_limit_date, '%Y-%m-%dT%H:%M:%S') AS shipping_limit_date,
+                CAST(shipping_limit_date AS TIMESTAMP) AS shipping_limit_date,
                 CAST(price AS DOUBLE) AS price,
                 CAST(freight_value AS DOUBLE) AS freight_value
             FROM order_items;
         """)
         self.conn.execute("DROP TABLE order_items;")
         self.conn.execute("ALTER TABLE order_items_convert RENAME TO order_items;")
+
 
     def _process_order_payments(self):
         self.conn.execute("""
@@ -108,29 +109,31 @@ class S3CsvFileProcessor:
                 CAST(review_score AS INTEGER) AS review_score,
                 TRIM(review_comment_title) AS review_comment_title,
                 TRIM(review_comment_message) AS review_comment_message,
-                strftime(review_creation_date, '%Y-%m-%d') AS review_creation_date,
-                strftime(review_answer_timestamp, '%Y-%m-%dT%H:%M:%S') AS review_answer_timestamp
+                CAST(review_creation_date AS TIMESTAMP) AS review_creation_date,
+                CAST(review_answer_timestamp AS TIMESTAMP) AS review_answer_timestamp
             FROM order_reviews;
         """)
         self.conn.execute("DROP TABLE order_reviews;")
         self.conn.execute("ALTER TABLE order_reviews_convert RENAME TO order_reviews;")
 
+
     def _process_orders(self):
         self.conn.execute("""
-           CREATE OR REPLACE TABLE orders_convert AS
+            CREATE OR REPLACE TABLE orders_convert AS
             SELECT DISTINCT
                 CAST(order_id AS TEXT) AS order_id,
                 CAST(customer_id AS TEXT) AS customer_id,
                 LOWER(TRIM(order_status)) AS order_status,
-                strftime(order_purchase_timestamp, '%Y-%m-%dT%H:%M:%S') AS order_purchase_timestamp,
-                strftime(order_approved_at, '%Y-%m-%dT%H:%M:%S') AS order_approved_at,
-                strftime(order_delivered_carrier_date, '%Y-%m-%dT%H:%M:%S') AS order_delivered_carrier_date,
-                strftime(order_delivered_customer_date, '%Y-%m-%dT%H:%M:%S') AS order_delivered_customer_date,
-                strftime(order_estimated_delivery_date, '%Y-%m-%dT%H:%M:%S') AS order_estimated_delivery_date
+                CAST(order_purchase_timestamp AS TIMESTAMP) AS order_purchase_timestamp,
+                CAST(order_approved_at AS TIMESTAMP) AS order_approved_at,
+                CAST(order_delivered_carrier_date AS TIMESTAMP) AS order_delivered_carrier_date,
+                CAST(order_delivered_customer_date AS TIMESTAMP) AS order_delivered_customer_date,
+                CAST(order_estimated_delivery_date AS TIMESTAMP) AS order_estimated_delivery_date
             FROM orders;
         """)
         self.conn.execute("DROP TABLE orders;")
         self.conn.execute("ALTER TABLE orders_convert RENAME TO orders;")
+
 
     def _process_product_category_name_translation(self):
         self.conn.execute("""
