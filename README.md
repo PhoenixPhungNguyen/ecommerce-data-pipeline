@@ -77,8 +77,14 @@ git clone https://github.com/PhoenixPhungNguyen/ecommerce-data-pipeline.git
 ### Setup virtual environment
 Navigate to your cloned directory:
 ```shell
+# Create virtual environment using Python 3.11
 uv venv --python 3.11
+# Activate the virtual environment
+# On Windows:
 source .venv/Scripts/activate
+# On macOS/Linux:
+source .venv/bin/activate
+# Install dependencies from pyproject.toml
 uv sync
 ```
 
@@ -89,10 +95,6 @@ uv sync
 
 To start all services:
 ```shell
-make up
-```
-Or, without Makefile:
-```shell
 docker compose up -d --build
 ```
 
@@ -101,15 +103,20 @@ docker compose up -d --build
 ### Apache Airflow
 Orchestrates ETL workflows for ecommerce data processing.
 <p align="center">
-    <img src="assets/diagrams/airflow-dag.png" alt="airflow-dag" style="border-radius: 10px;">
+    <img src="assets/diagrams/ecommerce_airflow_dag.png" alt="airflow-dag" style="border-radius: 10px;">
     </br>
   Airflow overview
 </p>
-
+Airflow connection
+<p align="center">
+    <img src="assets/diagrams/ecommerce_airflow_connection.png" alt="airflow-connection" style="border-radius: 10px;">
+    </br>
+  Airflow connection overview
+</p>
 ### Amazon S3
 Data Lake
 <p align="center">
-    <img src="assets/diagrams/amazon-s3.png" alt="amazon-s3" style="border-radius: 10px;">
+    <img src="assets/diagrams/ecommerce_s3.png" alt="ecommerce_s3" style="border-radius: 10px;">
     </br>
   Amazon S3 overview
 </p>
@@ -120,7 +127,7 @@ Used for lightweight data transformation and analytics at the data lake layer.
 ### Snowflake
 Data Warehouse
 <p align="center">
-    <img src="assets/diagrams/snowflake.png" alt="snowflake" style="border-radius: 10px;">
+    <img src="assets/diagrams/snowflake_overview.png" alt="snowflake_overview" style="border-radius: 10px;">
     </br>
   Snowflake overview
 </p>
@@ -128,7 +135,7 @@ Data Warehouse
 ### dbt & Great Expectations
 dbt transforms data into analytics-ready models; Great Expectations validates data quality.
 <p align="center">
-    <img src="assets/diagrams/dbt-dag.png" alt="dbt-dag" style="border-radius: 10px;">
+    <img src="assets/diagrams/dbt_docs_lineage.png" alt="dbt_docs_lineage" style="border-radius: 10px;">
     </br>
   dbt overview
 </p>
