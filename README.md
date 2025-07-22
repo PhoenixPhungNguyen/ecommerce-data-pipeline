@@ -99,26 +99,57 @@ docker compose up -d --build
 ```
 
 ## Tech Stack
+### Google Cloud Platform (GCP)
+Create API key in API & Services.
+<p align="center">
+    <img src="images/drive_api_key.png" alt="drive_api_key" style="border-radius: 10px;">
+    </br>
+</p>
+Share ecommerce_data folder which contains 8 CSV files to ingest data from this folder to Amazon S3
+<p align="center">
+    <img src="images/drive_folder.png" alt="drive_folder" style="border-radius: 10px;">
+    </br>
+</p>
 
 ### Apache Airflow
 Orchestrates ETL workflows for ecommerce data processing.
 <p align="center">
-    <img src="assets/diagrams/ecommerce_airflow_dag.png" alt="airflow-dag" style="border-radius: 10px;">
+    <img src="images/ecommerce_airflow_dag.png" alt="airflow-dag" style="border-radius: 10px;">
     </br>
   Airflow overview
 </p>
-Airflow connection
+Airflow connection: Setup connection to AWS, Slack and Snowflake
 <p align="center">
-    <img src="assets/diagrams/ecommerce_airflow_connection.png" alt="airflow-connection" style="border-radius: 10px;">
+    <img src="images/ecommerce_airflow_connection.png" alt="airflow-connection" style="border-radius: 10px;">
     </br>
   Airflow connection overview
 </p>
+
 ### Amazon S3
 Data Lake
 <p align="center">
-    <img src="assets/diagrams/ecommerce_s3.png" alt="ecommerce_s3" style="border-radius: 10px;">
+    <img src="images/ecommerce_s3.png" alt="ecommerce_s3" style="border-radius: 10px;">
     </br>
   Amazon S3 overview
+</p>
+Raw folder
+<p align="center">
+    <img src="images/ecommerce_s3_raw.png" alt="ecommerce_s3_raw" style="border-radius: 10px;">
+    <img src="images/ecommerce_s3_raw2.png" alt="ecommerce_s3_raw" style="border-radius: 10px;">
+    </br>
+</p>
+Processed folder
+<p align="center">
+    <img src="images/ecommerce_s3_process.png" alt="ecommerce_s3_process" style="border-radius: 10px;">
+    <img src="images/ecommerce_s3_process2.png" alt="ecommerce_s3_process2" style="border-radius: 10px;">
+    </br>
+</p>
+
+### Slack
+Used for notifications on Airflow task failure or success.
+<p align="center">
+    <img src="images/ecommerce_slack.png" alt="ecommerce_slack" style="border-radius: 10px;">
+    </br>
 </p>
 
 ### DuckDB
@@ -127,23 +158,34 @@ Used for lightweight data transformation and analytics at the data lake layer.
 ### Snowflake
 Data Warehouse
 <p align="center">
-    <img src="assets/diagrams/snowflake_overview.png" alt="snowflake_overview" style="border-radius: 10px;">
+    <img src="images/snowflake_overview.png" alt="snowflake_overview" style="border-radius: 10px;">
     </br>
   Snowflake overview
+</p>
+<p align="center">
+    <img src="images/snowflake_detail.png" alt="snowflake_detail" style="border-radius: 10px;">
+    <img src="images/snowflake_detail2.png" alt="snowflake_detail2" style="border-radius: 10px;">
+    <img src="images/snowflake_detail3.png" alt="snowflake_detail3" style="border-radius: 10px;">
+    </br>
 </p>
 
 ### dbt & Great Expectations
 dbt transforms data into analytics-ready models; Great Expectations validates data quality.
 <p align="center">
-    <img src="assets/diagrams/dbt_docs_lineage.png" alt="dbt_docs_lineage" style="border-radius: 10px;">
+    <img src="images/dbt_docs_lineage.png" alt="dbt_docs_lineage" style="border-radius: 10px;">
     </br>
   dbt overview
+</p>
+<p align="center">
+    <img src="images/dbt_docs_project.png" alt="dbt_docs_project" style="border-radius: 10px;">
+    <img src="images/dbt_docs_database.png" alt="dbt_docs_database" style="border-radius: 10px;">
+    </br>
 </p>
 
 ### PowerBI
 For dashboarding and visualization of ecommerce analytics.
 <p align="center">
-    <img src="assets/diagrams/powerbi.png" alt="powerbi" style="border-radius: 10px;">
+    <img src="images/powerbi.png" alt="powerbi" style="border-radius: 10px;">
     </br>
   PowerBI overview
 </p>
