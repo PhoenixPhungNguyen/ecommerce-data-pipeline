@@ -1,6 +1,5 @@
 # Ecommerce Data Pipeline
-
-This project demonstrates an ecommerce data pipeline that automates the extraction, transformation, and loading (ETL) of data from the OLTP system of an ecommerce platform. The pipeline centralizes sales and payment data, enabling efficient processing, regulatory compliance, and analytics to support business decision-making and reporting.
+A production-grade ETL data pipeline for ecommerce platforms, using Airflow, Snowflake, dbt, and Power BI.  This project automates the ingestion, transformation, validation, and reporting of sales and payment data from OLTP sources.
 
 ## Table of Contents
 - [Ecommerce Data Pipeline](#ecommerce-data-pipeline)
@@ -74,24 +73,29 @@ The ecommerce datasets include sales and payments information. These are typical
 git clone https://github.com/PhoenixPhungNguyen/ecommerce-data-pipeline.git
 ```
 
-### Setup virtual environment
-Navigate to your cloned directory:
-```shell
-# Create virtual environment using Python 3.11
-uv venv --python 3.11
-# Activate the virtual environment
-# On Windows:
-source .venv/Scripts/activate
-# On macOS/Linux:
-source .venv/bin/activate
-# Install dependencies from pyproject.toml
-uv sync
-```
+### Setting up virtual environment and dependencies
 
+- Create and activate virtual environment:
+  ```shell
+  uv venv --python 3.11
+  source .venv/bin/activate   # or .venv/Scripts/activate on Windows
+  ```
+- Initialize project and install packages:
+  ```shell
+  uv init
+  uv add dbt-core dbt_snowflake ipykernel duckdb boto3 pyspark==3.3.0 pymupdf apache-airflow
+  uv sync
+  ```
 ### Start services
 
-> - Create a `.env` file at the root level for environment variables (see `.env.example`).
-> - Ensure any required data files are placed in the appropriate folders as described in the documentation.
+- Create a `.env` file at the root level for environment variables (see `.env.example`).
+- Ensure any required data files are placed in the appropriate folders as described in the documentation.
+- Make sure to add .env, .venv/, and other sensitive files to .gitignore.
+- Configuring environment variables: Copy .env.example to .env and fill in:
+  Google API Key and Google drive folder ID
+  Slack tokens
+  AWS access keys
+  Snowflake credentials
 
 To start all services:
 ```shell
@@ -102,12 +106,12 @@ docker compose up -d --build
 ### Google Cloud Platform (GCP)
 Create API key in API & Services.
 <p align="center">
-    <img src="images/drive_api_key.png" alt="drive_api_key" style="border-radius: 10px;">
+    <img src="images/ecommerce_drive_api_key.png" alt="drive_api_key" style="border-radius: 10px;">
     </br>
 </p>
 Share ecommerce_data folder which contains 8 CSV files to ingest data from this folder to Amazon S3
 <p align="center">
-    <img src="images/drive_folder.png" alt="drive_folder" style="border-radius: 10px;">
+    <img src="images/ecommerce_drive_folder.png" alt="drive_folder" style="border-radius: 10px;">
     </br>
 </p>
 
@@ -118,12 +122,29 @@ Orchestrates ETL workflows for ecommerce data processing.
     </br>
   Airflow overview
 </p>
-Airflow connection: Setup connection to AWS, Slack and Snowflake
+
+- Building and running Airflow with Docker
+```shell
+cd docker/spark-app
+docker build . -t spark-app
+cd ../../
+docker compose up -d --build
+```
+
+- Install providers:
+```shell
+uv pip install apache-airflow-providers-slack httpfs
+```
+
+- Setup connections in Airflow UI for Slack, Snowflake, and AWS.
 <p align="center">
     <img src="images/ecommerce_airflow_connection.png" alt="airflow-connection" style="border-radius: 10px;">
     </br>
   Airflow connection overview
 </p>
+
+### DuckDB
+Used for lightweight data transformation and analytics at the data lake layer.
 
 ### Amazon S3
 Data Lake
@@ -146,41 +167,68 @@ Processed folder
 </p>
 
 ### Slack
-Used for notifications on Airflow task failure or success.
+Slack integration is used to receive real-time notifications on Airflow DAG failures and successes.  
 <p align="center">
     <img src="images/ecommerce_slack.png" alt="ecommerce_slack" style="border-radius: 10px;">
     </br>
 </p>
 
-### DuckDB
-Used for lightweight data transformation and analytics at the data lake layer.
-
 ### Snowflake
 Data Warehouse
 <p align="center">
-    <img src="images/snowflake_overview.png" alt="snowflake_overview" style="border-radius: 10px;">
+    <img src="images/ecommerce_snowflake_overview.png" alt="snowflake_overview" style="border-radius: 10px;">
     </br>
   Snowflake overview
 </p>
+Snowflake setup
+Follow instructions in snowflake-setup.md
+
 <p align="center">
-    <img src="images/snowflake_detail.png" alt="snowflake_detail" style="border-radius: 10px;">
-    <img src="images/snowflake_detail2.png" alt="snowflake_detail2" style="border-radius: 10px;">
-    <img src="images/snowflake_detail3.png" alt="snowflake_detail3" style="border-radius: 10px;">
+    <img src="images/ecommerce_snowflake_detail.png" alt="snowflake_detail" style="border-radius: 10px;">
+    <img src="images/ecommerce_snowflake_detail2.png" alt="snowflake_detail2" style="border-radius: 10px;">
+    <img src="images/ecommerce_snowflake_detail3.png" alt="snowflake_detail3" style="border-radius: 10px;">
     </br>
 </p>
 
 ### dbt & Great Expectations
-dbt transforms data into analytics-ready models; Great Expectations validates data quality.
+dbt (Data Build Tool) is used to transform raw data into analytics-ready, modeled datasets, manage version control, automate SQL queries, and generate documentation. 
+Great Expectations complements dbt by automating data quality checks, generating detailed reports, and integrating seamlessly for end-to-end validation.
+
+Setup & Run dbt
+Configure ~/.dbt/profiles.yml with your Snowflake account details
+dbt commands: 
+```shell
+uv pip install dbt-core dbt-duckdb
+```
+cd ecommerce_dbt
+```shell
+dbt debug       /* Check configuration */ 
+dbt deps        /* Download dependent packages (if any) */  
+dbt seed        /* Load CSV seed data into DuckDB */ 
+dbt compile     /* Compile SQL models without running them */ 
+dbt run         /* Run all models to build tables/views */ 
+dbt snapshot    /* Execute snapshots to capture state changes over time */ 
+dbt test        /* Run data tests to validate data quality */ 
+```
+
+Generate and serve documentation for your dbt models and data quality checks:
+``shell
+dbt docs generate
+dbt docs serve
+```
+
+View lineage graphs of your transformations to understand dependencies:
 <p align="center">
-    <img src="images/dbt_docs_lineage.png" alt="dbt_docs_lineage" style="border-radius: 10px;">
+    <img src="images/ecommerce_dbt_docs_lineage.png" alt="dbt_docs_lineage" style="border-radius: 10px;">
     </br>
   dbt overview
 </p>
 <p align="center">
-    <img src="images/dbt_docs_project.png" alt="dbt_docs_project" style="border-radius: 10px;">
-    <img src="images/dbt_docs_database.png" alt="dbt_docs_database" style="border-radius: 10px;">
+    <img src="images/ecommerce_dbt_docs_project.png" alt="dbt_docs_project" style="border-radius: 10px;">
+    <img src="images/ecommerce_dbt_docs_database.png" alt="dbt_docs_database" style="border-radius: 10px;">
     </br>
 </p>
+
 
 ### PowerBI
 For dashboarding and visualization of ecommerce analytics.
@@ -195,10 +243,12 @@ For dashboarding and visualization of ecommerce analytics.
 Once the pipeline is operational, you can generate insights such as:
 
 ### Ecommerce Overview
-- Total ecommerce expenses by month, department, or location.
-- Trends in salary, overtime, and deductions.
+- Revenue trends by month and product category
+- Payment delays by payment method or region
+- Conversion rate by traffic source (optional)
 
 ### Recommendations
-- Optimize ecommerce schedules to improve cash flow.
-- Target retention strategies for key employee segments.
-- Automate compliance checks to reduce audit risks.
+- Improve warehouse restocking strategy based on sales forecast
+- Optimize promotions based on high-performing SKUs
+- Identify abandoned cart patterns and take corrective actions
+
