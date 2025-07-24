@@ -57,6 +57,7 @@ The `ecommerce_dbt` project is structured to follow best practices, organized in
   - `marts/`: Contains curated models:
     - `dim/`: Dimension tables for reporting
     - `fact/`: Fact tables for KPIs and aggregations
+      
 
   | Layer         | Purpose                                           | Models                     |
   |---------------|---------------------------------------------------|------------------------------------|
@@ -86,7 +87,7 @@ Files used in this project: `scd_customers.sql`, `scd_products.sql`, `scd_seller
 
 ## Why This Architecture?
 
-We previously encountered several issues:
+Several issues were encountered before using this architecture in the ecommerce system:
 
 - Manual data uploads from business users
 - Inconsistent data formatting from the source
