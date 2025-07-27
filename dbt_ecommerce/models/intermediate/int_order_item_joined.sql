@@ -67,3 +67,6 @@ order_items_joined AS (
 
 SELECT *
 FROM order_items_joined
+WHERE customer_fk IS NOT NULL
+  AND product_fk IS NOT NULL
+  AND seller_fk IS NOT NULL

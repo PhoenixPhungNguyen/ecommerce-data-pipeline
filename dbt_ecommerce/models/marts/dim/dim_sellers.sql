@@ -14,6 +14,7 @@ WITH sellers AS (
         dbt_valid_from,
         dbt_valid_to
     FROM {{ ref('scd_sellers') }}
+    WHERE seller_id IS NOT NULL
 )
 SELECT *
 FROM sellers

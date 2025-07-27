@@ -15,6 +15,7 @@ WITH customers AS (
         dbt_valid_from,
         dbt_valid_to
     FROM {{ ref('scd_customers') }}
+    WHERE customer_id IS NOT NULL
 )
 SELECT *
 FROM customers

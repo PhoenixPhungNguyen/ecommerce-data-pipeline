@@ -19,6 +19,7 @@ WITH products AS (
         dbt_valid_from,
         dbt_valid_to
     FROM {{ ref('scd_products') }}
+    WHERE product_id IS NOT NULL
 )
 SELECT *
 FROM products

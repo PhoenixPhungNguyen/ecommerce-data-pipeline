@@ -1,6 +1,6 @@
 sources:
   - name: landing
-    description: Landing zone for Payroll data loaded from data lake
+    description: Landing zone for raw ecommerce data from OLTP source
     schema: landing
     database: ECOMMERCE_WAREHOUSE
     tables:

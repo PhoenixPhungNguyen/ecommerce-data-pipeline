@@ -19,4 +19,5 @@
 }}
 SELECT *
 FROM {{ ref('stg_products') }}
+WHERE product_id IS NOT NULL
 {% endsnapshot %}

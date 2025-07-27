@@ -61,3 +61,5 @@ reviews_joined AS (
 
 SELECT *
 FROM reviews_joined
+WHERE review_pk IS NOT NULL
+  AND customer_fk IS NOT NULL

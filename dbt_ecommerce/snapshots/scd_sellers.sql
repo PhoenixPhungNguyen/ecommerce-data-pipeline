@@ -14,4 +14,5 @@
 }}
 SELECT *
 FROM {{ ref('stg_sellers') }}
+WHERE seller_id IS NOT NULL
 {% endsnapshot %}

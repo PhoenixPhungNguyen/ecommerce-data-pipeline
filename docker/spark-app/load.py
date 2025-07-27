@@ -42,7 +42,7 @@ def _load_to_snowflake():
         .getOrCreate()
     )
     s3_uri_list = json.loads(S3_URI_LIST.replace("'", '"'))
-    # The url in S3_URI_LIST is expected to be in the format: s3://payroll-cdoguel/processed/file.parquet
+    # The url in S3_URI_LIST is expected to be in the format: s3://ecommerce-phoenix/processed/file.parquet
     # We need to replace the s3:// prefix with s3a:// for Spark to read it correctly
     s3a_uri_list = [uri.replace("s3://", "s3a://") for uri in s3_uri_list]
     for file_path in s3a_uri_list:

@@ -58,3 +58,4 @@ payments_joined AS (
 
 SELECT *
 FROM payments_joined
+WHERE customer_fk IS NOT NULL
