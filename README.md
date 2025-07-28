@@ -104,7 +104,30 @@ This architecture resolves those issues by offering:
 
 The result is a robust, production-ready pipeline that is transparent, testable, and easily extensible.
 
+## Architecture Q&A
+
+- **How did you ingest your data into the Data Lake?**  
+  -> Used Apache Airflow to automate the download of 8 CSVs from Google Drive and store in Amazon S3 (`raw/` folder).
+
+- **What transformation did you do in the Data Lake and what is the result of it?**  
+  -> Used DuckDB for light transformation including casting column data types, trimming whitespace, standardizing text case (e.g., lowercase city names,        uppercase state codes), and removing duplicate records (`SELECT DISTINCT`).  
+  The cleaned and typed data is then saved as Parquet files to the `processed/` folder in Amazon S3.
+
+- **What is your final data model after transforming with dbt?**  
+  -> Star schema with 5 dimension tables (`dim_customers`, `dim_products`, `dim_product_category_name_translation`,`dim_sellers`,`dim_dates` ) and 3 fact tables (`fact_order_items`, `fact_order_payments`, `fact_order_reviews`).
+
+- **How many records are there in each final table?**   
+    - `dim_customers`: 99.4K
+    - `dim_products`: 33K
+    - `dim_product_category_name_translation`: 71
+    - `dim_sellers`: 3.1K
+    - `dim_dates`: 1.5K
+    - `fact_order_items`: 112.7K
+    - `fact_order_payments`: 103.9K
+    - `fact_order_reviews`: 99.2K
+
 ## Project Structure
+
 ```shell
 .
 ├── airflow/                /* Airflow folder, contains DAGs and scripts */
@@ -280,6 +303,14 @@ Follow instructions in snowflake-setup.md
     </br>
 </p>
 
+- Sample of `fact_order_items` Data
+
+Below is a sample of 5 rows from the `fact_order_items` table after dbt transformation in the `marts` schema used for reporting and analysis in Power BI.
+
+<p align="center">
+    <img src="images/ecommerce_snowflake_fact_order_items_data.png" alt="ecommerce_snowflake_fact_order_items_data.png" style="border-radius: 10px;"  width = "70%">
+</p>
+
 ### dbt & Great Expectations
 dbt (Data Build Tool) is used to transform raw data into analytics-ready, modeled datasets, manage version control, automate SQL queries, and generate documentation. 
 Great Expectations complements dbt by automating data quality checks, generating detailed reports, and integrating seamlessly for end-to-end validation.
@@ -343,6 +374,51 @@ For dashboarding and visualization of ecommerce analytics.
     </br>
   PowerBI overview
 </p>
+
+## ⚠️ Challenges
+
+### Challenge 1: From Flat CSVs to Analytical OLAP Model
+
+#### 🧩 Problem
+
+The dataset consisted of 8 flat CSVs from an OLTP system, each as an isolated entity without dimensional modeling.
+The key challenge was designing a clean OLAP schema — particularly a fact table combining `orders` and `order_items` — while maintaining item-level granularity.
+
+#### ❗ Difficulties Encountered
+
+- Choosing the right date (`purchase`, `approved`, `delivered`) for time-based analysis.
+- Joining `orders` and `order_items` with consistent keys and correct grain.
+- Building SCD Type 2 dimensions (`customers`, `products`, `sellers`).
+- Defining reliable metrics (`price`, `freight_value`) and FK relationships.
+- Implementing `dbt` incremental logic using `dbt_valid_from`.
+
+#### ✅ Lessons Learned
+
+- OLTP ≠ OLAP — define fact grain first, then model dimensions around it.
+- Use intermediate models to decouple complex joins.
+- Apply SCD Type 2 for dimension history tracking.
+- Ensure data quality with dbt tests and Great Expectations.
+- Leverage dbt lineage graphs to validate transformation flow.
+
+### Challenge 2: Building Power BI Dashboard Without Prior Experience
+
+#### 🧩 Problem
+
+I had no prior experience with Power BI or data visualization tools. Creating a meaningful dashboard based on the transformed OLAP model was a significant challenge.
+
+#### ❗ Difficulties Encountered
+
+- Had to self-learn Power BI from scratch by using ChatGPT, Microsoft documentation, and community tutorials.
+- Mapping fact and dimension tables to appropriate visuals required a solid understanding of the star schema.
+- Designing clear and effective visuals to present business KPIs without clutter or redundancy took considerable time.
+- Encountered difficulties with DAX formulas, such as calculating Year-To-Date (YTD), distinct counts, and filtering by slicers.
+
+#### ✅ Lessons Learned
+
+- **Power BI is powerful but has a steep learning curve**, especially regarding data modeling and DAX. I improved my DAX skills by following tutorials like those on [DAX Studio](https://daxstudio.org/docs/tutorials/writing-dax-queries/).
+- Begin with clear business questions before designing any visuals.
+- Always **validate visuals against raw data** to ensure accuracy.
+- Leverage **online resources** — including ChatGPT, Power BI learning websites, and sample Power BI files from other Data Engineer projects — to accelerate learning.
 
 ## Business Insights
 
