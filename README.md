@@ -2,25 +2,30 @@
 A production-grade ETL data pipeline for ecommerce data, using Airflow, Snowflake, dbt, and Power BI.  This project automates the ingestion, transformation, validation, and reporting of sales and payment data from OLTP sources.
 
 ## Table of Contents
-- [Ecommerce Data Pipeline](#ecommerce-data-pipeline)
-  - [Table of Contents](#table-of-contents)
-  - [Architecture](#architecture)
-  - [Project Structure](#project-structure)
-  - [Data Source](#data-source)
-  - [Quickstart](#quickstart)
-    - [Clone the repository](#clone-the-repository)
-    - [Setup virtual environment](#setup-virtual-environment)
-    - [Start services](#start-services)
-  - [Tech Stack](#tech-stack)
-    - [Apache Airflow](#apache-airflow)
-    - [Amazon S3](#amazon-s3)
-    - [DuckDB](#duckdb)
-    - [Snowflake](#snowflake)
-    - [dbt \& Great Expectations](#dbt--great-expectations)
-    - [PowerBI](#powerbi)
-  - [Business Insights](#business-insights)
-    - [Ecommerce Overview](#ecommerce-overview)
-    - [Recommendations](#recommendations)
+- [Architecture](#architecture)
+- [Why This Architecture?](#why-this-architecture)
+- [Architecture Q&A](#architecture-qa)
+- [Project Structure](#project-structure)
+- [Data Source](#data-source)
+- [Quickstart](#quickstart)
+  - [Clone the Repository](#clone-the-repository)
+  - [Setup Virtual Environment](#setup-virtual-environment)
+  - [Start Services](#start-services)
+- [Tech Stack](#tech-stack)
+  - [Google Cloud Platform (GCP)](#google-cloud-platform-gcp)
+  - [Apache Airflow](#apache-airflow)
+  - [Amazon S3](#amazon-s3)
+  - [DuckDB](#duckdb)
+  - [Snowflake](#snowflake)
+  - [dbt & Great Expectations](#dbt--great-expectations)
+  - [Slack](#slack)
+  - [Power BI](#power-bi)
+- [Challenges](#challenges)
+  - [Challenge 1: From Flat CSVs to Analytical OLAP Model](#challenge-1-from-flat-csvs-to-analytical-olap-model)
+  - [Challenge 2: Building Power BI Dashboard Without Prior Experience](#challenge-2-building-power-bi-dashboard-without-prior-experience)
+- [Business Insights](#business-insights)
+  - [Ecommerce Overview](#ecommerce-overview)
+  - [Recommendations](#recommendations)
 
 ## Architecture
 
@@ -61,11 +66,11 @@ The `ecommerce_dbt` project is structured to follow best practices, organized in
 
   | Layer         | Purpose                                           | Models                     |
   |---------------|---------------------------------------------------|------------------------------------|
-  | `landing`     | Raw data after Spark transformation               | `lnd_customers`, `lnd_order_items`, `lnd_order_payment`, `lnd_order_reviews`, `lnd_orders`, `lnd_product_category_name_translation`, `lnd_products`, `lnd_sellers`                |
-  | `staging`     | Cleaned, typed, renamed fields                    | `stg_customers`, `stg_order_items`, `stg_order_payment`, `stg_order_reviews`, `stg_orders`, `stg_product_category_name_translation`, `stg_products`, ` stg_sellers`                      |
+  | `landing`     | Raw data after Spark transformation               | `lnd_customers`,`lnd_order_items`,`lnd_order_payment`,`lnd_order_reviews`, `lnd_orders`,`lnd_product_category_name_translation`,`lnd_products`,`lnd_sellers`                |
+  | `staging`     | Cleaned, typed, renamed fields                    | `stg_customers`,`stg_order_items`,`stg_order_payment`,`stg_order_reviews`, `stg_orders`,`stg_product_category_name_translation`,`stg_products`,` stg_sellers`                      |
   | `intermediate`| Joins & enrichments                               | `int_order_item_joined`             |
-  | `marts - dim` | Dimension tables                                  | `dim_customers`, `dim_products`, `dim_sellers`,`dim_products_category_name_translation`    |
-  | `marts - fact`| Fact tables                                       | `fact_orders_items`, `fact_order_payments`,`fact_order_reviews`     |
+  | `marts - dim` | Dimension tables                                  | `dim_customers`,`dim_products`, `dim_sellers`,`dim_products_category_name_translation`    |
+  | `marts - fact`| Fact tables                                       | `fact_orders_items`,`fact_order_payments`,`fact_order_reviews`     |
 
 - **`seeds/`**: Stores static reference data from 01 Jan 2016 to 31 Dec 2019 stored in `dim_dates.csv` file.
 
@@ -367,24 +372,16 @@ dbt docs serve
   <img src="images/ecommerce_dbt_docs_database.png" alt="dbt_docs_database" width="35%" style="vertical-align: top; border-radius: 10px;" />
 </p>
 
-### PowerBI
-For dashboarding and visualization of ecommerce analytics.
-<p align="center">
-    <img src="images/powerbi.png" alt="powerbi" style="border-radius: 10px;"  width = "70%">
-    </br>
-  PowerBI overview
-</p>
-
-## ⚠️ Challenges
+## Challenges
 
 ### Challenge 1: From Flat CSVs to Analytical OLAP Model
 
-#### 🧩 Problem
+#### Problem
 
 The dataset consisted of 8 flat CSVs from an OLTP system, each as an isolated entity without dimensional modeling.
 The key challenge was designing a clean OLAP schema — particularly a fact table combining `orders` and `order_items` — while maintaining item-level granularity.
 
-#### ❗ Difficulties Encountered
+#### Difficulties Encountered
 
 - Choosing the right date (`purchase`, `approved`, `delivered`) for time-based analysis.
 - Joining `orders` and `order_items` with consistent keys and correct grain.
@@ -392,7 +389,7 @@ The key challenge was designing a clean OLAP schema — particularly a fact tabl
 - Defining reliable metrics (`price`, `freight_value`) and FK relationships.
 - Implementing `dbt` incremental logic using `dbt_valid_from`.
 
-#### ✅ Lessons Learned
+#### Lessons Learned
 
 - OLTP ≠ OLAP — define fact grain first, then model dimensions around it.
 - Use intermediate models to decouple complex joins.
@@ -402,18 +399,18 @@ The key challenge was designing a clean OLAP schema — particularly a fact tabl
 
 ### Challenge 2: Building Power BI Dashboard Without Prior Experience
 
-#### 🧩 Problem
+#### Problem
 
 I had no prior experience with Power BI or data visualization tools. Creating a meaningful dashboard based on the transformed OLAP model was a significant challenge.
 
-#### ❗ Difficulties Encountered
+#### Difficulties Encountered
 
 - Had to self-learn Power BI from scratch by using ChatGPT, Microsoft documentation, and community tutorials.
 - Mapping fact and dimension tables to appropriate visuals required a solid understanding of the star schema.
 - Designing clear and effective visuals to present business KPIs without clutter or redundancy took considerable time.
 - Encountered difficulties with DAX formulas, such as calculating Year-To-Date (YTD), distinct counts, and filtering by slicers.
 
-#### ✅ Lessons Learned
+#### Lessons Learned
 
 - **Power BI is powerful but has a steep learning curve**, especially regarding data modeling and DAX. I improved my DAX skills by following tutorials like those on [DAX Studio](https://daxstudio.org/docs/tutorials/writing-dax-queries/).
 - Begin with clear business questions before designing any visuals.
@@ -422,15 +419,50 @@ I had no prior experience with Power BI or data visualization tools. Creating a 
 
 ## Business Insights
 
-Once the pipeline is operational, you can generate insights such as:
-
 ### Ecommerce Overview
-- Revenue trends by month and product category
-- Payment delays by payment method or region
-- Conversion rate by traffic source (optional)
+
+- Total orders, revenue, and average order value KPIs and average order by customer
+- Monthly delivery time trends over two years  
+- Revenue breakdown by top 10 product categories  
+
+### Power BI Dashboard
+
+<p align="center">
+    <img src="assets/dashboard/ecommerce_dashboard.png" alt="ecommerce_dashboard" style="border-radius: 10px;"  width = "90%">
+    <br/>
+    <em>Power BI dashboard presenting ecommerce KPIs and trends</em>
+</p>
+
+### Data Modeling (Power BI)
+
+The star schema from Snowflake was imported into Power BI to support accurate slicing/dicing and KPI calculation.
+
+<p align="center">
+    <img src="assets/dashboard/ecommerce_diagram.png" alt="ecommerce_diagram" style="border-radius: 10px;"  width = "90%">
+    <br/>
+    <em>Data model in Power BI with fact and dimension tables</em>
+</p>
+
+### Key Insights
+
+1. **Low Repeat Purchase Rate**  
+   On average, each customer places only **1.14 orders**, indicating limited repeat engagement.
+
+2. **Significant Improvement in Delivery Time**  
+   Average delivery time dropped from **55 days to 8 days**, showing strong operational optimisation.
+
+3. **Revenue Concentrated in Few Product Categories**  
+   Top contributors include **health_beauty**, **watches_gifts**, and **bed_bath_table**, driving the bulk of sales.
 
 ### Recommendations
-- Improve warehouse restocking strategy based on sales forecast
-- Optimize promotions based on high-performing SKUs
-- Identify abandoned cart patterns and take corrective actions
+
+1. **Boost Customer Retention**  
+   Launch loyalty programs or targeted discounts to encourage repeat purchases.
+
+2. **Sustain Logistics Performance**  
+   Monitor spikes in delivery time and strengthen supply chain coordination.
+
+3. **Focus on High-Performing Categories**  
+   Invest in marketing top-selling categories and consider cross-sell strategies with underperforming ones.
+
 
